@@ -58,10 +58,10 @@ const DomoList = (props) => {
         try {
           const response = await fetch(`/deleteDomo/${id}`, { method: 'DELETE' });
           if (response.ok) {
-            setDomos(prev => prev.filter(d => d._id !== id));
+            setDomos(currentDomos => currentDomos.filter(domo => domo._id !== id));//filter all the domos that has not been deleted
           } else {
             const errData = await response.json();
-            helper.handleError(errData.error || 'Delete failed');
+            helper.handleError(errData.error);
           }
         } catch {
           helper.handleError('Network error');
