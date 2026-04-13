@@ -33,11 +33,7 @@ const makeDomo = async (req, res) => {
 
 // delete domo
 const deleteDomo = async (req, res) => {
-    const { id } = req.params;          //get id from exist domo
-    const owner = req.session.account._id; //domo for now
-
     try {
-        //every deleted domo must match each id's owner
         return res.status(200).json({ message: 'Domo deleted successfully' });
     } catch (err) {
         console.error(err);
