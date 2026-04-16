@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
 const setName = (name) => _.escape(name).trim();
-const DomoSchema = new mongoose.Schema({
+const TaskSchema = new mongoose.Schema({
     name:{
         type: String,
         require: true,
@@ -30,10 +30,10 @@ const DomoSchema = new mongoose.Schema({
     
 })
 
-DomoSchema.statics.toAPI = (doc) =>({
+TaskSchema.statics.toAPI = (doc) =>({
     name: doc.name,
     age:doc.age,
 });
 
-const DomoModel = mongoose.model('Domo', DomoSchema);
-module.exports = DomoModel;
+const TaskModel = mongoose.model('Task', TaskSchema);
+module.exports = TaskModel;
