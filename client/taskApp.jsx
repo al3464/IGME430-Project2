@@ -8,15 +8,14 @@ const handleTask = (e, onTaskAdded) => {
     helper.hideError();
 
     const name = e.target.querySelector('#taskName').value;
-    const age = e.target.querySelector('#taskAge').value;
-    const level = e.target.querySelector('#taskLevel').value;
 
-    if(!name || !age || !level){
+
+    if(!name){
         helper.handleError('All fields are required');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, level}, onTaskAdded);
+    helper.sendPost(e.target.action, {name}, onTaskAdded);
     return false;
 }
 
@@ -29,12 +28,8 @@ const TaskForm = (props) => {
         method="POST"
         className="taskForm"
         >
-        <label htmlFor="name">Name: </label>
-        <input id="taskName" type="text" name="name" placeholder="Task name" />
-        <label htmlFor="age">Age: </label>
-        <input id="taskAge" type="number" min="0" name="age" />
-        <label htmlFor="level">Level: </label>
-        <input id="taskLevel" type="number" min="0" name="level" />
+        <label htmlFor="name"></label>
+        <input id="taskName" type="text" name="name" placeholder="Today's Plan" />
         <input className="makeTaskSubmit" type="submit" value="Make Task" />
 
         </form>
@@ -80,10 +75,7 @@ const TaskList = (props) => {
     const taskNodes = tasks.map(task => {
         return(
             <div key={task._id} className="task">
-            <img src="/assets/img/taskface.jpeg" alt="task face" className="taskFace" />
-            <h3 className="taskName">Name: {task.name}</h3>
-            <h3 className="taskAge">Age: {task.age}</h3>
-            <h3 className="taskLevel">Levels: {task.level}</h3>
+            <h3 className="taskName">{task.name}</h3>
             <button onClick={() => handleDelete(task._id)} className="deleteTask">Delete</button>
             </div>
 

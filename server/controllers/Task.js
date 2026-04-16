@@ -1,26 +1,25 @@
 const models = require('../models');
 const Task = models.Task;
+const Pomodoro = models.Pomodoro;
 
 const taskPage = (req, res) => {
     return res.render('app');
 };
 
 const makeTask = async (req, res) => {
-    if (!req.body.name || !req.body.age || !req.body.level) {
-        return res.status(400).json({ error: 'Name, age, and level are required' });
+    if (!req.body.name) {
+        return res.status(400).json({ error: 'content are required' });
     }
 
     const taskData = {
         name: req.body.name,
-        age: req.body.age,
-        level: req.body.level,
         owner: req.session.account._id,
     };
 
     try {
         const newTask = new Task(taskData);
         await newTask.save();
-        return res.status(201).json({ name: newTask.name, age: newTask.age, level: newTask.level });
+        return res.status(201).json({ name: newTask.name });
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
@@ -49,7 +48,7 @@ const deleteTask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const query = { owner: req.session.account._id };
-        const docs = await Task.find(query).select('name age level _id').lean().exec();
+        const docs = await Task.find(query).select('name _id').lean().exec();
         return res.json({ tasks: docs });
     } catch (err) {
         console.log(err);
@@ -57,7 +56,29 @@ const getTasks = async (req, res) => {
     }
 };
 
+//finish a pomodoro duration
+const finishPomodoro = async (req, res) => {
+    if (!req.body.planId) {
+        return res.status(400).json({ error: 'planId are required' });
+    }
+    const pomodoroData = {
+        planId: req.body.planId,
+        duration: req.body.duration,
+        owner: req.session.account._id,
+    }
+    try {
+        const oneDuration = new Pomodoro({ planId, duration, owner });
+        await oneDuration.save();
+        // 可选：更新任务的已用番茄数（如果需要）
+        return res.status(201).json({ message: 'pomodoro updated' });
+      }catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Could not svae pomodoro' });
+    }
+}
+
 module.exports = {
+    finishPomodoro,
     taskPage,
     makeTask,
     getTasks,

@@ -8,16 +8,6 @@ const TaskSchema = new mongoose.Schema({
         trim: true,
         set: setName,
     },
-    age:{
-        type:Number,
-        min:0,
-        required: true,
-    },
-    level:{
-        type:Number,
-        min:0,
-        required: true,
-    },
     owner:{
         type:mongoose.Schema.ObjectId,
         required: true,
@@ -32,7 +22,6 @@ const TaskSchema = new mongoose.Schema({
 
 TaskSchema.statics.toAPI = (doc) =>({
     name: doc.name,
-    age:doc.age,
 });
 
 const TaskModel = mongoose.model('Task', TaskSchema);

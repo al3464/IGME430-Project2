@@ -128,12 +128,17 @@ body {
 .taskForm {
     border: 2px solid #338acc;
     height: auto;            
-    min-height: 35px;
+    min-height: 350px;
     width: 700px;
     padding: 10px 0;
     background-color: #55acee;
     border-radius: 4px;
     overflow: hidden;        
+}
+
+#taskName {
+    min-height: 300px;
+    width: 650px;
 }
 
 #taskMessage {
