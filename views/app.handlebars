@@ -1,21 +1,32 @@
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
   <title>TaskFlow</title>
-  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/assets/style.css" />
 </head>
-<body>
-  <nav>
-    <div class="navlink"><a href="/logout">Log out</a></div>
-  </nav>
 
-  <section id="app"></section>
+<body id="appBody">
 
-  <div id="taskMessage" class="hidden">
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
-    <img id="taskIcon" src="assets/img/task.png" alt="task"/>
-  </div>
+    <div class="catspeak">
+      <img id="cat" src="assets/img/cat.png" alt="cat" class="card-logo" />
+      <div class="speech-wrapper">
+        <img id="speech" src="/assets/img/speech.png" alt="speech box" />
+        <div id="taskMessage" class="hidden">
+          <span id="errorMessage"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <section id="app"></section>
+
+
   <script src="/assets/appBundle.js"></script>
+  <nav>
+    <div class="navlink" id="logout"><a href="/logout">Log out</a></div>
+  </nav>
 </body>
+
 </html>

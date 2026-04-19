@@ -1,28 +1,28 @@
 const mongoose = require('mongoose');
 
 const PomodoroSchema = new mongoose.Schema({
-    planId: { 
-        type: mongoose.Schema.ObjectId, 
-        ref: 'Task', 
+    planId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Task',
         trim: true,
-        required: true 
+        required: true
     },
-    duration: { 
-        type: Number, 
+    duration: {
+        type: Number,
         default: 25,
         required: true,
     },      // 专注分钟数
-    completedAt: { 
-        type: Date, 
-        default: Date.now 
+    completedAt: {
+        type: Date,
+        default: Date.now
     },
-    owner: { 
-        type: mongoose.Schema.ObjectId, 
-        ref: 'Account', 
-        required: true 
+    owner: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Account',
+        required: true
     },
     createdDate: {
-        type:Date,
+        type: Date,
         default: Date.now,
     },
 });

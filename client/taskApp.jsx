@@ -1,105 +1,120 @@
 const helper = require('./helper.js');
 const React = require('react');
-const { useState, useEffect} = React;
-const {createRoot} = require('react-dom/client');
+const { useState, useEffect } = React;
+const { createRoot } = require('react-dom/client');
+const PomodoroTimer = require('./PomodoroTimer.jsx');
 
 const handleTask = (e, onTaskAdded) => {
     e.preventDefault();
     helper.hideError();
 
     const name = e.target.querySelector('#taskName').value;
-
-
-    if(!name){
+    const pomodoroTrigger = e.target.querySelector('#pomodoroTrigger').checked;
+    console.log(pomodoroTrigger);
+    if (!name) {
         helper.handleError('All fields are required');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name}, onTaskAdded);
+    helper.sendPost(e.target.action, { name,  pomodoroTrigger}, onTaskAdded);
     return false;
 }
 
 const TaskForm = (props) => {
-    return(
+    return (
         <form id="taskForm"
-        onSubmit = {(e) => handleTask(e, props.triggerReload)}
-        name="taskForm"
-        action="/app"
-        method="POST"
-        className="taskForm"
+            onSubmit={(e) => handleTask(e, props.triggerReload)}
+            name="taskForm"
+            action="/app"
+            method="POST"
+            className="taskForm"
         >
-        <label htmlFor="name"></label>
-        <input id="taskName" type="text" name="name" placeholder="Today's Plan" />
-        <input className="makeTaskSubmit" type="submit" value="Make Task" />
+            <label htmlFor="name"></label>
+            <input id="taskName" type="text" name="name" placeholder="Today's Plan" />
+            <div>
+                <label>
+                    <input type="checkbox" id="pomodoroTrigger" name="pomodoroTrigger" />
+                    Enable Pomodoro
+                </label>
+            </div>
+            <input className="makeTaskSubmit" type="submit" value="Make Task" />
 
         </form>
 
     );
 }
 
-const TaskList = (props) => {
+const TaskList = ({ props }) => {
     const [tasks, setTasks] = useState(props.tasks);
+
     useEffect(() => {
-        const loadTasksFromServer = async() => {
+        const loadTasksFromServer = async () => {
             const response = await fetch('/getTasks');
             const data = await response.json();
             setTasks(data.tasks);
-
         };
         loadTasksFromServer();
-    },[props.reloadTasks]);
-    
+    }, [props.reloadTasks]);
+
     const handleDelete = async (id) => {
         try {
-          const response = await fetch(`/deleteTask/${id}`, { method: 'DELETE' });
-          if (response.ok) {
-            setTasks(currentTasks => currentTasks.filter(task => task._id !== id));
-          } else {
-            const errData = await response.json();
-            helper.handleError(errData.error);
-          }
+            const response = await fetch(`/deleteTask/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                setTasks(currentTasks => currentTasks.filter(task => task._id !== id));
+            } else {
+                const errData = await response.json();
+                helper.handleError(errData.error);
+            }
         } catch {
-          helper.handleError('Network error');
+            helper.handleError('Network error');
         }
     };
 
-      
-    if(tasks.length === 0){
+    if (tasks.length === 0) {
         return (
             <div className="taskList">
                 <h3 className="emptyTask">No Tasks Yet</h3>
             </div>
-        )
+        );
     }
 
-    const taskNodes = tasks.map(task => {
-        return(
-            <div key={task._id} className="task">
+    const taskNodes = tasks.map(task => (
+        <div key={task._id} className="task">
             <h3 className="taskName">{task.name}</h3>
             <button onClick={() => handleDelete(task._id)} className="deleteTask">Delete</button>
-            </div>
-
-        );
-    })
-
-    return (
-        <div className="taskList">
-            {taskNodes}
+            {task.pomodoroTrigger && (
+        <button onClick={() => props.onStartPomodoro(task._id)}>Start Pomodoro</button>
+       
+    )} 
         </div>
-    )
-}
+    ));
+
+    return <div className="taskList">{taskNodes}</div>;
+};
 
 const App = () => {
     const [reloadTasks, setReloadTasks] = useState(false);
+    const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);   // 新增
 
-    return(
+    return (
         <div>
             <div id="makeTask">
                 <TaskForm triggerReload={() => setReloadTasks(!reloadTasks)} />
             </div>
             <div id="tasks">
-                <TaskList tasks={[]} reloadTasks={reloadTasks} />
+                <TaskList props={{ tasks: [], reloadTasks: reloadTasks, onStartPomodoro: setActiveTimerTaskId }} />
             </div>
+            {activeTimerTaskId && (
+                <div className="pomodoro-wrapper">
+                    <PomodoroTimer
+                        taskId={activeTimerTaskId}
+                        onComplete={() => {
+                            setActiveTimerTaskId(null);
+                            setReloadTasks(prev => !prev); // 可选：刷新列表
+                        }}
+                    />
+                </div>
+            )}
         </div>
     )
 }

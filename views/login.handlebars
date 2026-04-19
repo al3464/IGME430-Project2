@@ -1,12 +1,21 @@
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <meta charset="utf-8"/>
   <title>TaskFlow</title>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
-<body> 
-
+<body id="loginbody"> 
+<div class="catspeak">
+    <img id="cat" src="assets/img/cat.png" alt="cat" class="card-logo" />
+    <div class="speech-wrapper">
+        <img id="speech" src="/assets/img/speech.png" alt="speech box" />
+        <div id="taskMessage" class="hidden">
+            <span id="errorMessage"></span>
+        </div>
+    </div>
+</div>
 <div class="topbar">
     <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
     <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
@@ -15,11 +24,6 @@
   <section id="content"></section>
 
 
-  <div id="taskMessage" class='hidden'>
-    <img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3>
-    <img id="task" src="assets/img/task.png" alt="task"/>
-  </div>
 
 
   <script src="/assets/loginBundle.js"></script>

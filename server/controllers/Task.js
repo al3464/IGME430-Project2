@@ -14,12 +14,13 @@ const makeTask = async (req, res) => {
     const taskData = {
         name: req.body.name,
         owner: req.session.account._id,
+        pomodoroTrigger: req.body.pomodoroTrigger,
     };
 
     try {
         const newTask = new Task(taskData);
         await newTask.save();
-        return res.status(201).json({ name: newTask.name });
+        return res.status(201).json({ name: newTask.name, pomodoroTrigger: newTask.pomodoroTrigger, });
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
@@ -48,7 +49,7 @@ const deleteTask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const query = { owner: req.session.account._id };
-        const docs = await Task.find(query).select('name _id').lean().exec();
+        const docs = await Task.find(query).select('name _id pomodoroTrigger').lean().exec();
         return res.json({ tasks: docs });
     } catch (err) {
         console.log(err);
@@ -67,9 +68,8 @@ const finishPomodoro = async (req, res) => {
         owner: req.session.account._id,
     }
     try {
-        const oneDuration = new Pomodoro({ planId, duration, owner });
+        const oneDuration = new Pomodoro(pomodoroData);
         await oneDuration.save();
-        // 可选：更新任务的已用番茄数（如果需要）
         return res.status(201).json({ message: 'pomodoro updated' });
       }catch (err) {
         console.error(err);

@@ -17,6 +17,10 @@ const TaskSchema = new mongoose.Schema({
         type:Date,
         default: Date.now,
     },
+    pomodoroTrigger: {
+        type: Boolean,
+        default: false,
+    }
     
 })
 
