@@ -14,12 +14,6 @@
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-#appBody{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 
 .topbar {
     display: flex;
@@ -70,12 +64,6 @@
 }
 
 
-.taskPanel {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;          
-    flex-wrap: wrap;    /*use for small screen*/ 
-}
 
 
 /* 确保 #content 没有额外边距 */
@@ -147,7 +135,6 @@
 }
 
 #taskName {
-    display: inline-block; 
     min-height: 180px;
     width: 250px;
 }
@@ -160,16 +147,6 @@
     bottom: 0;
     background: transparent;
     overflow: hidden;
-}
-
-#tasks {
-    border: 2px solid #e76767;        
-    border-radius: 20px;             
-    padding: 16px;                    
-    background-color: #ffffff;      
-    width:330px;
-    height:600px;
-    min-height: 80vh; 
 }
 
 #errorMessage {
@@ -205,18 +182,45 @@
     right:10px;
 }
 
+#appBody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.taskPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;          
+    flex-wrap: wrap;    /*use for small screen*/ 
+}
+
 .task {
     height:150px;
     background-image: url('/assets/img/taskbackground.png');
     margin-bottom: 20px;
     text-align: center;
     
+
 }
+
+#tasks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;  /* 卡片之间的间距 */
+    border: 2px solid #e76767;        
+    border-radius: 20px;             
+    padding: 16px;                    
+    background-color: #ffffff;      
+    width:650px;
+}
+
 
 .taskName{
     transform: translateY(50px);  
 }
 
 .buttonControl{
-    transform: translateY(80px);  
+    transform: translateY(70px);  
 }

@@ -90,7 +90,7 @@ const TaskList = ({ props }) => {
         </div>
     ));
 
-    return <div className="taskList">{taskNodes}</div>;
+    return <div id="tasks">{taskNodes}</div>;
 };
 
 const App = () => {
@@ -102,9 +102,9 @@ const App = () => {
             <div id="makeTask">
                 <TaskForm triggerReload={() => setReloadTasks(!reloadTasks)} />
             </div>
-            <div id="tasks">
+         
                 <TaskList props={{ tasks: [], reloadTasks: reloadTasks, onStartPomodoro: setActiveTimerTaskId }} />
-            </div>
+
             {activeTimerTaskId && (
                 <div className="pomodoro-wrapper">
                     <PomodoroTimer
