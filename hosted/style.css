@@ -14,7 +14,13 @@
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* 按钮栏容器：水平居中，白色背景，上圆角 */
+#appBody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .topbar {
     display: flex;
     justify-content: center;
@@ -25,12 +31,10 @@
     width: 350px;
 }
 
-/* 单个按钮容器 */
 .navlink {
     display: inline-block;
 }
 
-/* 按钮链接样式 */
 .navlink a {
     display: inline-block;
     background: transparent;
@@ -51,12 +55,12 @@
 
 .navlink a:hover {
     background: #f85e5e;
-    color: #55acee;
+    color: #fdfdfd;
 }
 
 /* 卡片容器（由 React 渲染在 #content 内） */
 .loginbar {
-    background: white;
+    background: rgb(248, 150, 150);
     border-radius: 0 0 16px 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     padding: 32px 24px;
@@ -64,6 +68,15 @@
     box-sizing: border-box;
     margin-top: 0;
 }
+
+
+.taskPanel {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;          
+    flex-wrap: wrap;    /*use for small screen*/ 
+}
+
 
 /* 确保 #content 没有额外边距 */
 #content {
@@ -96,14 +109,13 @@
 
 .mainForm input:focus {
     outline: none;
-    border-color: #55acee;
-    box-shadow: 0 0 0 2px rgba(85, 172, 238, 0.2);
+    border-color: #f34d1b;
 }
 
 /* 提交按钮跨两列 */
 .mainForm .formSubmit {
     grid-column: span 2;
-    background: #55acee;
+    background: #ee5555;
     color: white;
     border: none;
     border-radius: 8px;
@@ -115,7 +127,7 @@
 }
 
 .mainForm .formSubmit:hover {
-    background: #338acc;
+    background: #f3b3b3;
 }
 
 .hidden {
@@ -125,14 +137,13 @@
 
 .taskForm {
     text-align: center;
-    border: 2px solid #338acc;
+    border: 2px solid #cc4a33;
     height: auto;            
     min-height: 200px;
     width: 300px;
     padding: 10px 0;
-    background-color: #55acee;
-    border-radius: 4px;
-     
+    background-color: #f39292;
+    border-radius: 4px; 
 }
 
 #taskName {
@@ -147,18 +158,18 @@
     left: 0;
     right: 0;
     bottom: 0;
-    /* 移除之前的 display: inline-block，因为绝对定位会覆盖 */
     background: transparent;
-    pointer-events: none; /* 让错误信息不干扰点击，可选 */
     overflow: hidden;
 }
 
 #tasks {
-    border: 2px solid #55acee;        /* 蓝色边框 */
-    border-radius: 20px;              /* 圆角 */
-    padding: 16px;                    /* 内边距，让内容不贴边 */
-    background-color: #ffffff;        /* 白色背景（可选） */
-    width:300px;
+    border: 2px solid #e76767;        
+    border-radius: 20px;             
+    padding: 16px;                    
+    background-color: #ffffff;      
+    width:330px;
+    height:600px;
+    min-height: 80vh; 
 }
 
 #errorMessage {
@@ -178,7 +189,7 @@
 
 .catspeak {
     display: flex;
-    gap: 20px;                /* 两个图片之间的间距 */
+    gap: 20px;               
 }
 
 .speech-wrapper {
@@ -192,4 +203,20 @@
     width: 120px;
     bottom: 30px;  
     right:10px;
+}
+
+.task {
+    height:150px;
+    background-image: url('/assets/img/taskbackground.png');
+    margin-bottom: 20px;
+    text-align: center;
+    
+}
+
+.taskName{
+    transform: translateY(50px);  
+}
+
+.buttonControl{
+    transform: translateY(80px);  
 }

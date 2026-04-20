@@ -3,7 +3,7 @@ const React = require('react');
 const { useState, useEffect, useRef } = require('react');
 
 
-const PomodoroTimer = ({ taskId, onComplete }) => {
+const PomodoroTimer = ({taskId}) => {
     const [timer, setTimer] = useState(25 * 60); //timer = total secs
     const [isTriggered, setIsTriggered] = useState(false);
     const [mode, setMode] = useState('working'); // set status to 'working' or 'rest'

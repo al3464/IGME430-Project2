@@ -16,7 +16,7 @@ const handleTask = (e, onTaskAdded) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, { name,  pomodoroTrigger}, onTaskAdded);
+    helper.sendPost(e.target.action, { name, pomodoroTrigger }, onTaskAdded);
     return false;
 }
 
@@ -81,11 +81,12 @@ const TaskList = ({ props }) => {
     const taskNodes = tasks.map(task => (
         <div key={task._id} className="task">
             <h3 className="taskName">{task.name}</h3>
-            <button onClick={() => handleDelete(task._id)} className="deleteTask">Delete</button>
-            {task.pomodoroTrigger && (
-        <button onClick={() => props.onStartPomodoro(task._id)}>Start Pomodoro</button>
-       
-    )} 
+            <div className="buttonControl">
+                <button onClick={() => handleDelete(task._id)} className="deleteTask">Delete</button>
+                {task.pomodoroTrigger && (
+                    <button onClick={() => props.onStartPomodoro(task._id)}>Start Pomodoro</button>
+
+                )} </div>
         </div>
     ));
 
@@ -97,7 +98,7 @@ const App = () => {
     const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);   // 新增
 
     return (
-        <div>
+        <div className="taskPanel">
             <div id="makeTask">
                 <TaskForm triggerReload={() => setReloadTasks(!reloadTasks)} />
             </div>
@@ -110,7 +111,6 @@ const App = () => {
                         taskId={activeTimerTaskId}
                         onComplete={() => {
                             setActiveTimerTaskId(null);
-                            setReloadTasks(prev => !prev); // 可选：刷新列表
                         }}
                     />
                 </div>
