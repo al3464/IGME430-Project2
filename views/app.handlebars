@@ -9,23 +9,27 @@
 
 <body id="appBody">
 
-    <div class="catspeak">
-      <img id="cat" src="assets/img/cat.png" alt="cat" class="card-logo" />
-      <div class="speech-wrapper">
-        <img id="speech" src="/assets/img/speech.png" alt="speech box" />
-        <div id="taskMessage" class="hidden">
-          <span id="errorMessage"></span>
-        </div>
+  <div class="catspeak">
+    <img id="cat" src="assets/img/cat.png" alt="cat" class="card-logo" />
+    <div class="speech-wrapper">
+      <img id="speech" src="/assets/img/speech.png" alt="speech box" />
+      <div id="taskMessage" class="hidden">
+        <span id="errorMessage"></span>
       </div>
-
     </div>
 
-    <section id="app"></section>
+  </div>
+
+  <section id="app"></section>
 
 
   <script src="/assets/appBundle.js"></script>
+
   <nav>
     <div class="navlink" id="logout"><a href="/logout">Log out</a></div>
+    <div class="navlink">
+      <a href="/changePassword">Change Password</a>
+    </div>
   </nav>
 </body>
 

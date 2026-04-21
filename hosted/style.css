@@ -134,10 +134,6 @@
     border-radius: 4px; 
 }
 
-#taskName {
-    min-height: 180px;
-    width: 250px;
-}
 
 #taskMessage {
     position: absolute;
@@ -216,11 +212,18 @@
     width:650px;
 }
 
+#taskName {
+    min-height: 180px;
+    width: 250px;
+}
 
 .taskName{
     transform: translateY(50px);  
+    color:rgb(255, 254, 254);
 }
 
 .buttonControl{
     transform: translateY(70px);  
 }
+
+
