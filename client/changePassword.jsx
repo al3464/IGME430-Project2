@@ -15,7 +15,7 @@ const handleSubmit = async (e) => {
         helper.handleError('All fields are required');
         return;
     }
-    
+
     if (newPass !== newPass2) {
         helper.handleError('Password does not match');
         return;
@@ -47,7 +47,7 @@ const ChangePasswordWindow = (props) => {
 
     return (
         <div className="loginbar">
-            <form id="signupForm"
+            <form id="cpForm"
                 name="signupForm"
                 onSubmit={handleSubmit}
                 action="/changePassword"
@@ -60,8 +60,8 @@ const ChangePasswordWindow = (props) => {
                 <label htmlFor="newPass2">Confirm Password: </label>
                 <input id="newPass2" type="password" name="newPass2" placeholder="retype password" />
                 <input className="formSubmit" type="submit" value="Submit" />
+                <a className="back" href="/app">Back</a>
             </form>
-            <a href="/app">Back</a>
         </div>
     );
 };
