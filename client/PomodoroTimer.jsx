@@ -3,7 +3,7 @@ const React = require('react');
 const { useState, useEffect, useRef } = require('react');
 
 
-const PomodoroTimer = ({taskId}) => {
+const PomodoroTimer = ({taskId, onGiveup}) => {
     const [timer, setTimer] = useState(25 * 60); //timer = total secs
     const [isTriggered, setIsTriggered] = useState(false);
     const [mode, setMode] = useState('working'); // set status to 'working' or 'rest'
@@ -66,21 +66,37 @@ const PomodoroTimer = ({taskId}) => {
         }
     };
 
+    const giveup = () => {
+
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        
+        }
+        setIsTriggered(false);
+        if (onGiveup && typeof onGiveup === 'function') {
+            onGiveup();
+        } else {
+            console.warn('onCancel is not a function');
+        }
+    };
+
     useEffect(() => {
         return () => clearInterval(intervalRef.current);
     }, []);//stop all the react component
 
     return (
-        <div className="pomodoro-timer">
-            <div className="timer-mode">{mode === 'working' ? 'Working Time' : 'Time to have a break'}</div>
-            <div className="timer-display">{timerText(timer)}</div>
-            <div className="timer-controls">
+        <div className="pomodoroTimer">
+            <div className="timeMode">{mode === 'working' ? 'Working Time' : 'Time to have a break'}</div>
+            <div className="timeDisplay">{timerText(timer)}</div>
+            <div className="timeControls">
                 {!isTriggered ? (
                     <button onClick={start}>Start</button>
                 ) : (
                     <button onClick={pause}>Pause</button>
                 )}
                 <button onClick={reset}>Reset</button>
+                <button onClick={giveup}>Give up</button>
             </div>
         </div>
     );

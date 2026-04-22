@@ -111,6 +111,10 @@ const App = () => {
                         taskId={activeTimerTaskId}
                         onComplete={() => {
                             setActiveTimerTaskId(null);
+                        }}//complete and close the pomodoro timer
+
+                        onGiveup={() => {
+                            setActiveTimerTaskId(null);//give up this time's pomodoro
                         }}
                     />
                 </div>

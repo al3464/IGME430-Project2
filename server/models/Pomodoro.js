@@ -7,20 +7,24 @@ const PomodoroSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+
     duration: {
         type: Number,
         default: 25,
         required: true,
-    },      // 专注分钟数
-    completedAt: {
+    },      //focus time
+
+    finishedAt: {
         type: Date,
         default: Date.now
     },
+
     owner: {
         type: mongoose.Schema.ObjectId,
         ref: 'Account',
         required: true
     },
+
     createdDate: {
         type: Date,
         default: Date.now,
