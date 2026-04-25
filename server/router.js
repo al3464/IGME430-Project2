@@ -11,6 +11,8 @@ const router = (app) => {
     app.post('/finishPomodoro', mid.requiresSecure, mid.requiresLogin, controllers.Task.finishPomodoro);
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
+    app.get('/getPomodoroStats', mid.requiresLogin, controllers.Pomodoro.getStats);
+
     app.get('/app', mid.requiresLogin, controllers.Task.taskPage);
     app.post('/app', mid.requiresLogin, controllers.Task.makeTask);
 
