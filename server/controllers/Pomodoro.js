@@ -9,15 +9,15 @@ const getStats = async (req, res) => {
     oneWeekPass.setHours(0, 0, 0, 0);
 
     try {
-        const oneweekRecords = await Pomodoro.find({ owner });
+        const oneweekRecords = await Pomodoro.find({ owner }).select('finishedAt').lean();
+
         const dataInOneweek = oneweekRecords.filter(data => {
             if (data.finishedAt >= oneWeekPass && data.finishedAt <= today) {
                 return true;
             } else {
                 return false;
             }
-        }).select('finishedAt').lean();
-        ;
+        });
 
         const allStats = {};//colllect all the pomodoro stats
         dataInOneweek.forEach(data => {

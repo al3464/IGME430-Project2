@@ -62,15 +62,17 @@ const signup = async (req, res) => {
 
 };
 
+
+//set backen data for password changing
 const changePassword = async (req, res) => {
     const oldPass = `${req.body.oldPass}`;
     const newPass = `${req.body.newPass}`;
-    const newPass2 = `${req.body.newPass2}`;
+    const newPass2 = `${req.body.newPass2}`;//confirm password
     const userId = req.session.account._id;
 
     if (!oldPass || !newPass || !newPass2) {
         return res.status(400).json({ error: 'All fields are required' });
-    }
+    }//error catching for not filled out all the input 
 
     try {
         const bcrypt = require('bcrypt');
@@ -81,9 +83,9 @@ const changePassword = async (req, res) => {
             return res.status(401).json({ error: 'Old password is incorrect' });
         }
 
-        const newHashPass = await Account.generateHash(newPass);
+        const newHashPass = await Account.generateHash(newPass);//generate new password's hash 
         account.password = newHashPass;
-        await account.save();
+        await account.save();//save new password for account
         return res.json({ redirect: '/app' });
 
 

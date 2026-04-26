@@ -2,7 +2,8 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
-const PomodoroTimer = require('./PomodoroTimer.jsx');
+const PomodoroTimer = require('./pomodoroTimer.jsx');
+const PomodoroChart = require('./pomodoroChart.jsx');
 
 const handleTask = (e, onTaskAdded) => {
     e.preventDefault();
@@ -95,22 +96,31 @@ const TaskList = ({ props }) => {
 
 const App = () => {
     const [reloadTasks, setReloadTasks] = useState(false);
-    const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);   // 新增
+    const [refreshStats, setRefreshStats] = useState(false);
+    const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);  //set timer to null
+
+    // 番茄钟完成时，刷新统计
+    const handlePomodoroComplete = () => {
+        setRefreshStats(prev => !prev); // 触发图表刷新
+    };
 
     return (
         <div className="taskPanel">
             <div id="makeTask">
                 <TaskForm triggerReload={() => setReloadTasks(!reloadTasks)} />
             </div>
-         
-                <TaskList props={{ tasks: [], reloadTasks: reloadTasks, onStartPomodoro: setActiveTimerTaskId }} />
 
+            <TaskList props={{ tasks: [], reloadTasks: reloadTasks, onStartPomodoro: setActiveTimerTaskId }} />
+
+            <div className="sevenDaysStats">
+                <PomodoroChart refresh={refreshStats} />
+            </div>
             {activeTimerTaskId && (
                 <div className="pomodoro-wrapper">
                     <PomodoroTimer
-                        taskId={activeTimerTaskId}
-                        onComplete={() => {
-                            setActiveTimerTaskId(null);
+                        planId={activeTimerTaskId}
+                        onFinished={() => {
+                            handlePomodoroComplete;
                         }}//complete and close the pomodoro timer
 
                         onGiveup={() => {
@@ -118,7 +128,10 @@ const App = () => {
                         }}
                     />
                 </div>
+
             )}
+
+
         </div>
     )
 }

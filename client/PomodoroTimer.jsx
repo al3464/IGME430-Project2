@@ -3,9 +3,10 @@ const React = require('react');
 const { useState, useEffect, useRef } = require('react');
 
 
-const PomodoroTimer = ({taskId, onGiveup}) => {
-    const [timer, setTimer] = useState(25 * 60); //timer = total secs
+const PomodoroTimer = ({ planId, onGiveup, onFinished }) => {
+    const [timer, setTimer] = useState(1 * 60); //timer = total secs
     const [isTriggered, setIsTriggered] = useState(false);
+    const modeRef = useRef('work');
     const [mode, setMode] = useState('working'); // set status to 'working' or 'rest'
     const intervalRef = useRef(null);
 
@@ -18,42 +19,61 @@ const PomodoroTimer = ({taskId, onGiveup}) => {
 
 
     const start = () => {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
+        pause();
         setIsTriggered(true);
-        const startTimer = Date.now();
+        const startDate = Date.now();
         const startLeft = timer;
         intervalRef.current = setInterval(() => {//use setIterval() to repeat this function
-            const timePass = Math.floor((Date.now() - startTimer) / 1000);//mili secs convert to secs
+            const timePass = Math.floor((Date.now() - startDate) / 1000);//mili secs convert to secs
             const timeLeft = startLeft - timePass;
 
             if (timeLeft <= 0) {
-                clearInterval(intervalRef.current);
-                setIsTriggered(false);//if time=0, time is up, stop counting
-                if (mode === 'working') {
-                    fetch('/finishPomodoro', {//recording pomodoro data
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ taskId, duration: 25 }),
-                    }).then(() => {//recoridng done, switch to rest mode
-                        setMode('rest');
-                        setTimer(5 * 60);
-                    }).catch(helper.handleError);
-                } else {//if break done, switch to working mode
-                    setMode('working');
-                    setTimer(25 * 60);
-                }
+                pause();
+                setIsTriggered(false);
+                oneWeekCycle(); //record stats, switch mode
+
             } else {
                 setTimer(timeLeft);
             }
         }, 1000);
     };
 
+    useEffect(() => {
+        modeRef.current = mode;
+    }, [mode]);//when mode switch to rest mode, update to mode "rest"
+
+    const oneWeekCycle = async () => {
+
+        console.log('oneWeekCycle invoked, mode=', mode);
+
+        if (modeRef.current === 'working') {
+            fetch('/finishPomodoro', {//recording pomodoro data
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ planId, duration: 25 }),
+            }).then(() => {//recoridng done, switch to rest mode
+                setMode('resting');
+                setTimer(1 * 60);
+                start();
+
+                if (onFinished) {
+                    onFinished();
+                }
+
+            }).catch(helper.handleError);
+        } else {//if break done, switch to working mode
+            setMode('working');
+            setTimer(1 * 60);
+            start();
+        }
+    }
+
+
     const pause = () => {//when pause been pressed, user clearInterval() to really stop counting
-        clearInterval(intervalRef.current);
-        setIsTriggered(false);//seitch pasue to start
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
     };
 
     const reset = () => {
@@ -66,18 +86,14 @@ const PomodoroTimer = ({taskId, onGiveup}) => {
         }
     };
 
+    //cancel the timer when user dont want to continue pomodoro
     const giveup = () => {
-
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        
-        }
+        pause();
         setIsTriggered(false);
         if (onGiveup && typeof onGiveup === 'function') {
             onGiveup();
         } else {
-            console.warn('onCancel is not a function');
+            console.warn('onGiveup is not a function');
         }
     };
 
