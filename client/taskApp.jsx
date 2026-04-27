@@ -2,7 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
-const PomodoroTimer = require('./pomodoroTimer.jsx');
+const PomodoroTimer = require('./pomodoroTimer.jsx');// pomodoroTimer use lower case
 const PomodoroChart = require('./pomodoroChart.jsx');
 
 const handleTask = (e, onTaskAdded) => {
