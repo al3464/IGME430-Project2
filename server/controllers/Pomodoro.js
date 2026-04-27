@@ -3,16 +3,19 @@ const Pomodoro = models.Pomodoro;
 
 const getStats = async (req, res) => {
     const owner = req.session.account._id;
-    const today = new Date();//save today's date
+    const now = new Date();
+    const nowStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));//save today's date
+    const nowEnd = new Date(nowStart);
+    nowEnd.setUTCHours(23, 59, 59, 999);
     const oneWeekPass = new Date();
-    oneWeekPass.setDate(today.getDate() - 6);//use setDate to grab accurate date, include today
+    oneWeekPass.setDate(nowStart.getDate() - 6);//use setDate to grab accurate date, include today
     oneWeekPass.setHours(0, 0, 0, 0);
 
     try {
         const oneweekRecords = await Pomodoro.find({ owner }).select('finishedAt').lean();
 
         const dataInOneweek = oneweekRecords.filter(data => {
-            if (data.finishedAt >= oneWeekPass && data.finishedAt <= today) {
+            if (data.finishedAt >= oneWeekPass && data.finishedAt <= nowEnd) {
                 return true;
             } else {
                 return false;
@@ -20,9 +23,9 @@ const getStats = async (req, res) => {
         });
 
         const allStats = {};//colllect all the pomodoro stats
-        dataInOneweek.forEach(data => {
+        dataInOneweek.forEach(record => {
             // convert finishedAt data to formal date, slice(0, 10) collect date part(first 10 words)
-            const dateString = data.finishedAt.toISOString().slice(0, 10);
+            const dateString = record.finishedAt.toISOString().slice(0, 10);
             if (!allStats[dateString]) {
                 allStats[dateString] = 0;
             }
@@ -30,11 +33,9 @@ const getStats = async (req, res) => {
         });
 
         const records = [];
-        const oneWeek = 7;
-        for(let i = 0; i < oneWeek; i++){//add complete times to each day
+        for(let i = 0; i < 7; i++){//add complete times to each day
             const thisTime = new Date();//save the time that user who searched the records
-            thisTime.setDate(today.getDate() - i);
-            thisTime.setHours(0, 0, 0, 0);
+            thisTime.setDate(now.getDate() - i);
             const dateString = thisTime.toISOString().slice(0, 10);
             let count;
             if (allStats[dateString] !== undefined && allStats[dateString]!== null) {
@@ -43,8 +44,10 @@ const getStats = async (req, res) => {
                 count = 0;
             }
             records.push({ thisTime: dateString, count });//push all the results to 7 days records
-            return res.json({ oneweekRecords: records.reverse() }); // reverse each day's data, old times to new times
+            console.log(records);
+
         }
+        return res.json({ oneweekRecords: records.reverse() }); // reverse each day's data, old times to new times
 
     } catch(err) {
         console.error(err);

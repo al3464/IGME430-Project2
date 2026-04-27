@@ -29,7 +29,6 @@ const PomodoroTimer = ({ planId, onGiveup, onFinished }) => {
 
             if (timeLeft <= 0) {
                 pause();
-                setIsTriggered(false);
                 oneWeekCycle(); //record stats, switch mode
 
             } else {
@@ -74,6 +73,7 @@ const PomodoroTimer = ({ planId, onGiveup, onFinished }) => {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
         }
+        setIsTriggered(false);
     };
 
     const reset = () => {
@@ -89,7 +89,6 @@ const PomodoroTimer = ({ planId, onGiveup, onFinished }) => {
     //cancel the timer when user dont want to continue pomodoro
     const giveup = () => {
         pause();
-        setIsTriggered(false);
         if (onGiveup && typeof onGiveup === 'function') {
             onGiveup();
         } else {

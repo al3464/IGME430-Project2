@@ -57,11 +57,11 @@ const TaskList = ({ props }) => {
         loadTasksFromServer();
     }, [props.reloadTasks]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id) => {//delte the task
         try {
-            const response = await fetch(`/deleteTask/${id}`, { method: 'DELETE' });
+            const response = await fetch(`/deleteTask/${id}`, { method: 'DELETE' });//use delete method
             if (response.ok) {
-                setTasks(currentTasks => currentTasks.filter(task => task._id !== id));
+                setTasks(currentTasks => currentTasks.filter(task => task._id !== id));//filter all the task to grab the task use want to delete
             } else {
                 const errData = await response.json();
                 helper.handleError(errData.error);
@@ -99,9 +99,9 @@ const App = () => {
     const [refreshStats, setRefreshStats] = useState(false);
     const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);  //set timer to null
 
-    // 番茄钟完成时，刷新统计
+    //when pomodoro complete one duration, record the data
     const handlePomodoroComplete = () => {
-        setRefreshStats(prev => !prev); // 触发图表刷新
+        setRefreshStats(prev => !prev); //refresh the bar chart
     };
 
     return (

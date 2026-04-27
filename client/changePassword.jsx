@@ -1,12 +1,12 @@
 const helper = require('./helper.js');
 const React = require('react');
-const { useState } = React;
-const { createRoot } = require('react-dom/client');
+const { createRoot } = require('react-dom/client');//mounting to HTML
 
 const handleSubmit = async (e) => {
     e.preventDefault();
     helper.hideError();
 
+    //declare old, new, confirm password
     const oldPass = e.target.querySelector('#oldPass').value;
     const newPass = e.target.querySelector('#newPass').value;
     const newPass2 = e.target.querySelector('#newPass2').value;
@@ -14,28 +14,26 @@ const handleSubmit = async (e) => {
     if (!oldPass || !newPass || !newPass2) {
         helper.handleError('All fields are required');
         return;
-    }
+    }//catching error for empty input 
 
     if (newPass !== newPass2) {
         helper.handleError('Password does not match');
         return;
-    }
+    }//ensure new password is correct
 
-    try {
+    try {//fetch change password to send input to backen
         const response = await fetch('/changePassword', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ oldPass, newPass }),
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            helper.handleError(data.error || 'could not change password now');
+        if (!response.ok) {//when status return false, then return this 
+            helper.handleError('could not change password now');
             return;
         }
 
-        helper.handleError('success!');
+        helper.handleError('success!');//if change pass word successful return 201
     } catch {
         helper.handleError('Failed to load');
     }

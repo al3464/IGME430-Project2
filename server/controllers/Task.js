@@ -62,15 +62,15 @@ const finishPomodoro = async (req, res) => {
     if (!req.body.planId) {
         return res.status(400).json({ error: 'planId are required' });
     }
-    const pomodoroData = {
+    const pomodoroData = {//get pomodoro data form models
         planId: req.body.planId,
         duration: req.body.duration,
         owner: req.session.account._id,
     }
     try {
         const oneDuration = new Pomodoro(pomodoroData);
-        await oneDuration.save();
-        return res.status(201).json({ message: 'pomodoro updated' });
+        await oneDuration.save();//save to mangoDB
+        return res.status(201).json({ message: 'pomodoro updated' });//if save success then return status 201
       }catch (err) {
         console.error(err);
         return res.status(500).json({ error: 'Could not svae pomodoro' });
