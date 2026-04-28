@@ -13,8 +13,8 @@ const myStats = (refresh) => {//use refresh to automatic refresh the chart
             try {//update stats to front end and update it to bar chart
                 const res = await fetch('/getPomodoroStats');
                 const json = await res.json();
-                console.log('stats length:', json.oneweekRecords.length);
-                setRecord(json.oneweekRecords);
+                console.log('stats length:', json.oneweekRecords.length);//test if length is > 1
+                setRecord(json.oneweekRecords);//update oneweeRecords
             } catch (err) {
                 console.error(err);
             }
@@ -27,9 +27,10 @@ const myStats = (refresh) => {//use refresh to automatic refresh the chart
     }
 
     console.log('Fetched stats data:', record);
-
+ 
+    //using properties get from recharts to build a bar chart
     return (
-        <div className="stats-chart">
+        <div className="bar-chart">
             <h3>Last 7 Days Pomodoros</h3>
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={record}>

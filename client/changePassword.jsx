@@ -40,8 +40,8 @@ const handleSubmit = async (e) => {
     
 }
 
-
-const ChangePasswordWindow = (props) => {
+//build a password changing section to the front-end
+const ChangePasswordWindow = () => {
 
     return (
         <div className="loginbar">

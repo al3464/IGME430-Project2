@@ -15,7 +15,17 @@ const makeTask = async (req, res) => {
         name: req.body.name,
         owner: req.session.account._id,
         pomodoroTrigger: req.body.pomodoroTrigger,
+        isPrime : req.session.account.isPrime,//add a boolean data for taskData
     };
+
+    console.log('owner:', taskData.owner, 'isPrime:', taskData.isPrime);//test isPrime is undefine or not
+
+    if (!taskData.isPrime) {//set ifPrime statements, a user who has no premium only have two plans to make
+        const taskNumber = await Task.countDocuments({ owner : taskData.owner });
+        if (taskNumber >= 2) {
+            return res.status(403).json({ error: 'I am so sorry! Free plan only allow two task!'});
+        }
+    }
 
     try {
         const newTask = new Task(taskData);

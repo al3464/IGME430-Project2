@@ -7,6 +7,9 @@ const router = (app) => {
     app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
     app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
     app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
+    app.get('/getPremiumUser', mid.requiresLogin, controllers.Account.getPremiumUser);
+    app.post('/addPremium', mid.requiresLogin, controllers.Account.addPremium);
+
 
     app.post('/finishPomodoro', mid.requiresSecure, mid.requiresLogin, controllers.Task.finishPomodoro);
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
@@ -21,6 +24,8 @@ const router = (app) => {
 
     app.delete('/deleteTask/:id', mid.requiresLogin, controllers.Task.deleteTask);
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+    app.use(mid.requiresSecure, controllers.notFound);
+
 };
 
 module.exports = router;

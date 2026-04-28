@@ -20,8 +20,7 @@ const TaskSchema = new mongoose.Schema({
     pomodoroTrigger: {
         type: Boolean,
         default: false,
-    }
-    
+    },
 })
 
 TaskSchema.statics.toAPI = (doc) =>({

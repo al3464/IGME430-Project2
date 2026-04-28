@@ -94,14 +94,59 @@ const TaskList = ({ props }) => {
     return <div id="tasks">{taskNodes}</div>;
 };
 
+//build profit moodels
+const usePrime = () => {
+    const [isPrime, setIsPrime] = useState(false);
+
+    useEffect(() => {
+        const fetchPremium = async () => {
+            try {//send premium data to backen
+                const res = await fetch('/getPremiumUser');
+                const data = await res.json();
+                setIsPrime(data.isPrime);
+            } catch (err) {
+                console.error('Failed to fetch user info', err);
+            } 
+        };
+        fetchPremium();
+    }, []);
+
+    const sendPremium = async () => {
+        try {//post method to fetch addPremium function
+            const res = await fetch('/addPremium', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            setIsPrime(data.isPrime);//set updated isPrime property
+            return data.isPrime;
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    return { isPrime, sendPremium };//pass properties to App()
+}
+
+
+
+
+
 const App = () => {
     const [reloadTasks, setReloadTasks] = useState(false);
     const [refreshStats, setRefreshStats] = useState(false);
     const [activeTimerTaskId, setActiveTimerTaskId] = useState(null);  //set timer to null
+    const { isPrime, sendPremium } = usePrime();
 
     //when pomodoro complete one duration, record the data
     const handlePomodoroComplete = () => {
         setRefreshStats(prev => !prev); //refresh the bar chart
+    };
+
+    const handleUpgrade = async () => {
+        const newPrime = await sendPremium();//update isPrime to front-end
+        if (newPrime !== undefined) {
+            setReloadTasks(prev => !prev);
+        }
     };
 
     return (
@@ -124,12 +169,20 @@ const App = () => {
                         }}//complete and close the pomodoro timer
 
                         onGiveup={() => {
-                            setActiveTimerTaskId(null);//give up this time's pomodoro
+                            setActiveTimerTaskId(null);//cancel this time's pomodoro
                         }}
                     />
                 </div>
 
+
             )}
+
+            <div>
+                <div className="premium-info">
+                    <p>Plan: {isPrime ? 'Premium (Unlimited tasks)' : 'Free (Max 2 tasks)'}</p>
+                    {!isPrime && <button onClick={handleUpgrade}>Upgrade</button>}
+                </div>
+            </div>
 
 
         </div>

@@ -94,9 +94,43 @@ const changePassword = async (req, res) => {
         return res.status(500).json({ error: 'An error occured' });
     }
 
-
-
 }
+
+//get user's id from account models, use for premium 
+const getPremiumUser = async (req, res) => {
+    try {
+        const account = await Account.findById(req.session.account._id).select('username isPrime').lean();
+        //search user's info from database, catch 'username and isPrime' property
+        return res.json({ isPrime: account.isPrime });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Failed to get user info' });
+    }
+
+ 
+}
+
+
+const addPremium = async (req, res) => {
+    const userId = req.session.account._id;
+
+        try{
+            const account = await Account.findById(userId);//use findById locate user's userId
+            if (!account) return res.status(404).json({ error: 'Account not found' });
+            if (account.isPrime === true) {//switch isPrime's status 
+                account.isPrime = false;
+            } else {
+                account.isPrime = true;
+            }
+            await account.save(); //save data from mangodb, updated premium status in account
+            req.session.account.isPrime = account.isPrime;
+            return res.json({ isPrime: account.isPrime });
+        }catch(err){
+            console.error(err);
+            return res.status(500).json({ error: 'Failed to get premium' });
+        }
+}
+
 
 module.exports = {
     changePassword,
@@ -105,4 +139,6 @@ module.exports = {
     loginPage,
     login,
     logout,
+    addPremium,
+    getPremiumUser,
 }
