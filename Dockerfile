@@ -15,4 +15,4 @@ RUN npm ci --only=production
 EXPOSE 3000
 
 # 启动应用（把 "app.js" 换成你的实际入口文件，比如 "server.js" 或 "bin/www"）
-CMD ["node", "app.js"]
+CMD ["node", "server/app.js"]
